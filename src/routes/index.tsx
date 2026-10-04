@@ -147,9 +147,22 @@ function Balloons() {
 
 function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [trackKey, setTrackKey] = useState<(typeof TRACKS)[number]["key"]>("birthday");
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const track = TRACKS.find((t) => t.key === trackKey)!;
+
+  const selectTrack = (key: (typeof TRACKS)[number]["key"]) => {
+    if (key === trackKey) return;
+    const audio = audioRef.current;
+    if (audio) audio.pause();
+    setTrackKey(key);
+    setPlaying(false);
+    setProgress(0);
+    setDuration(0);
+  };
 
   const toggle = async () => {
     const audio = audioRef.current;
@@ -170,10 +183,26 @@ function MusicPlayer() {
 
   return (
     <div className="relative mx-auto w-full max-w-md rounded-4xl border border-border bg-card p-6 shadow-[0_18px_50px_-18px_var(--color-primary)]">
+      <div className="mb-5 grid grid-cols-2 gap-2 rounded-full bg-secondary p-1">
+        {TRACKS.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => selectTrack(t.key)}
+            aria-pressed={trackKey === t.key}
+            className={`rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
+              trackKey === t.key
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
       <div className="flex items-center gap-4">
         <button
           onClick={toggle}
-          aria-label={playing ? "Pause the birthday song" : "Play the birthday song"}
+          aria-label={playing ? `Pause ${track.label}` : `Play ${track.label}`}
           className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
           style={{ animation: playing ? "soft-pulse 1.6s ease-in-out infinite" : undefined }}
         >
@@ -190,10 +219,10 @@ function MusicPlayer() {
         </button>
         <div className="min-w-0 flex-1">
           <p className="truncate font-display text-xl font-semibold text-foreground">
-            A Birthday Song for Arsheen
+            {track.label}
           </p>
           <p className="text-sm text-muted-foreground">
-            {playing ? "Now playing… press pause anytime" : "Press play for her song 🎵"}
+            {playing ? "Now playing… press pause anytime" : track.subtitle}
           </p>
         </div>
       </div>
@@ -211,7 +240,7 @@ function MusicPlayer() {
             const audio = audioRef.current;
             if (audio) audio.currentTime = Number(e.target.value);
           }}
-          aria-label="Seek through the song"
+          aria-label="Seek through the music"
           className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
         />
         <span className="w-10 text-xs tabular-nums text-muted-foreground">
@@ -220,7 +249,8 @@ function MusicPlayer() {
       </div>
       <audio
         ref={audioRef}
-        src={songAsset.url}
+        key={track.key}
+        src={track.src}
         preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
