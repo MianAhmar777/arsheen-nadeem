@@ -385,11 +385,11 @@ function Index() {
       <section className="relative px-4 py-16">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-3xl font-semibold text-primary sm:text-4xl">
-            🎵 Her Birthday Song
+            🎵 Her Birthday Music
           </h2>
           <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-            A cheerful song made just for Arsheen — press play and let the
-            celebration begin.
+            A cheerful birthday song and a peaceful Islamic tune — pick one and
+            press play.
           </p>
           <div className="mt-8">
             <MusicPlayer />
