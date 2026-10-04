@@ -2,6 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import photoAsset from "@/assets/arsheen-photo.jpg.asset.json";
 import songAsset from "@/assets/arsheen-birthday-song.mp3.asset.json";
+import tuneAsset from "@/assets/arsheen-islamic-tune.mp3.asset.json";
+
+const TRACKS = [
+  {
+    key: "birthday",
+    label: "Birthday Song",
+    subtitle: "A cheerful song made just for Arsheen",
+    src: songAsset.url,
+  },
+  {
+    key: "tune",
+    label: "Islamic Tune",
+    subtitle: "A peaceful instrumental melody for duas",
+    src: tuneAsset.url,
+  },
+] as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
