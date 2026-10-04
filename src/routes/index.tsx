@@ -89,9 +89,9 @@ function Confetti() {
           className="confetti-piece"
           style={
             {
-              left: p.left,
-              width: p.width,
-              height: p.height,
+        left: p.left,
+        width: `${p.width}px`,
+        height: `${p.height}px`,
               backgroundColor: p.color,
               borderRadius: p.round ? "50%" : "2px",
               "--dur": p.dur,
